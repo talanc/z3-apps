@@ -1,0 +1,162 @@
+;; Input
+;; 5 3 x | x 7 x | x x x
+;; 6 x x | 1 9 5 | x x x
+;; x 9 8 | x x x | x 6 x
+;; ------+-------+------
+;; 8 x x | x 6 x | x x 3
+;; 4 x x | 8 x 3 | x x 1
+;; 7 x x | x 2 x | x x 6
+;; ------+-------+------
+;; x 6 x | x x x | 2 8 x
+;; x x x | 4 1 9 | x x 5
+;; x x x | x 8 x | x 7 9
+
+;; Output (expected)
+;; 5 3 4 | 6 7 8 | 9 1 2
+;; 6 7 2 | 1 9 5 | 3 4 8
+;; 1 9 8 | 3 4 2 | 5 6 7
+;; ------+-------+------
+;; 8 5 9 | 7 6 1 | 4 2 3
+;; 4 2 6 | 8 5 3 | 7 9 1
+;; 7 1 3 | 9 2 4 | 8 5 6
+;; ------+-------+------
+;; 9 6 1 | 5 3 7 | 2 8 4
+;; 2 8 7 | 4 1 9 | 6 3 5
+;; 3 4 5 | 2 8 6 | 1 7 9
+
+;; r c
+(declare-fun x (Int Int) Int)
+
+(define-fun check-num ((n Int) (a1 Int) (a2 Int) (b1 Int) (b2 Int) (c1 Int) (c2 Int) (d1 Int) (d2 Int) (e1 Int) (e2 Int) (f1 Int) (f2 Int) (g1 Int) (g2 Int) (h1 Int) (h2 Int) (i1 Int) (i2 Int)) Bool
+    (and
+        (= (x a1 a2) n)
+        (not (= (x b1 b2) n))
+        (not (= (x c1 c2) n))
+        (not (= (x d1 d2) n))
+        (not (= (x e1 e2) n))
+        (not (= (x f1 f2) n))
+        (not (= (x g1 g2) n))
+        (not (= (x h1 h2) n))
+        (not (= (x i1 i2) n))
+    )
+)
+
+(define-fun check-inner ((a1 Int) (a2 Int) (b1 Int) (b2 Int) (c1 Int) (c2 Int) (d1 Int) (d2 Int) (e1 Int) (e2 Int) (f1 Int) (f2 Int) (g1 Int) (g2 Int) (h1 Int) (h2 Int) (i1 Int) (i2 Int)) Bool
+    (or
+        (check-num 1 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-num 2 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-num 3 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-num 4 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-num 5 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-num 6 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-num 7 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-num 8 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-num 9 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+    )
+)
+
+(define-fun check ((a1 Int) (a2 Int) (b1 Int) (b2 Int) (c1 Int) (c2 Int) (d1 Int) (d2 Int) (e1 Int) (e2 Int) (f1 Int) (f2 Int) (g1 Int) (g2 Int) (h1 Int) (h2 Int) (i1 Int) (i2 Int)) Bool
+    (and
+        (check-inner a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2)
+        (check-inner b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2 a1 a2)
+        (check-inner c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2 a1 a2 b1 b2)
+        (check-inner d1 d2 e1 e2 f1 f2 g1 g2 h1 h2 i1 i2 a1 a2 b1 b2 c1 c2)
+        (check-inner e1 e2 f1 f2 g1 g2 h1 h2 i1 i2 a1 a2 b1 b2 c1 c2 d1 d2)
+        (check-inner f1 f2 g1 g2 h1 h2 i1 i2 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2)
+        (check-inner g1 g2 h1 h2 i1 i2 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2)
+        (check-inner h1 h2 i1 i2 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2)
+        (check-inner i1 i2 a1 a2 b1 b2 c1 c2 d1 d2 e1 e2 f1 f2 g1 g2 h1 h2)
+    )
+)
+
+(define-fun check-square ((r Int) (c Int)) Bool
+    (check
+        (+ r 0) (+ c 0)
+        (+ r 0) (+ c 1)
+        (+ r 0) (+ c 2)
+        (+ r 1) (+ c 0)
+        (+ r 1) (+ c 1)
+        (+ r 1) (+ c 2)
+        (+ r 2) (+ c 0)
+        (+ r 2) (+ c 1)
+        (+ r 2) (+ c 2)
+    )
+)
+
+(define-fun check-row ((r Int)) Bool
+    (check r 1 r 2 r 3 r 4 r 5 r 6 r 7 r 8 r 9)
+)
+
+(define-fun check-col ((c Int)) Bool
+    (check 1 c 2 c 3 c 4 c 5 c 6 c 7 c 8 c 9 c)
+)
+
+(assert (and
+    ;; Inputs
+    (= (x 1 1) 5)
+    (= (x 1 2) 3)
+    (= (x 1 5) 7)
+    (= (x 2 1) 6)
+    (= (x 2 4) 1)
+    (= (x 2 5) 9)
+    (= (x 2 6) 5)
+    (= (x 3 2) 9)
+    (= (x 3 3) 8)
+    (= (x 3 8) 6)
+    (= (x 4 1) 8)
+    (= (x 4 5) 6)
+    (= (x 4 9) 3)
+    (= (x 5 1) 4)
+    (= (x 5 4) 8)
+    (= (x 5 6) 3)
+    (= (x 5 9) 1)
+    (= (x 6 1) 7)
+    (= (x 6 5) 2)
+    (= (x 6 9) 6)
+    (= (x 7 2) 6)
+    (= (x 7 7) 2)
+    (= (x 7 8) 8)
+    (= (x 8 4) 4)
+    (= (x 8 5) 1)
+    (= (x 8 6) 9)
+    (= (x 8 9) 5)
+    (= (x 9 5) 8)
+    (= (x 9 8) 7)
+    (= (x 9 9) 9)
+
+    ;; Square checks
+    (check-square 1 1)
+    (check-square 1 4)
+    (check-square 1 7)
+    (check-square 4 1)
+    (check-square 4 4)
+    (check-square 4 7)
+    (check-square 7 1)
+    (check-square 7 4)
+    (check-square 7 7)
+
+    ;; Row checks
+    (check-row 1)
+    (check-row 2)
+    (check-row 3)
+    (check-row 4)
+    (check-row 5)
+    (check-row 6)
+    (check-row 7)
+    (check-row 8)
+    (check-row 9)
+
+    ;; Column checks
+    (check-col 1)
+    (check-col 2)
+    (check-col 3)
+    (check-col 4)
+    (check-col 5)
+    (check-col 6)
+    (check-col 7)
+    (check-col 8)
+    (check-col 9)
+))
+
+(check-sat)
+(get-model)

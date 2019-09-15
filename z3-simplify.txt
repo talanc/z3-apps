@@ -1,0 +1,6 @@
+(declare-const a Int)
+(display (+ 1 1 1 1 1 1 1 1 -1 -1 -1))
+(define-fun eq ((a Bool) (b Bool)) Bool
+    (= a b)
+)
+(simplify (eq true false))

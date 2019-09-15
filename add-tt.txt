@@ -1,0 +1,38 @@
+add truth table
+
+a b c | d
+0 0 0 | 0
+1 0 0 | 1
+0 1 0 | 1
+1 1 0 | 0
+0 0 1 | 1
+1 0 1 | 0
+0 1 1 | 0
+1 1 1 | 1
+
+a b c | b xor c | not(b xor c) | a xor (not(b xor c)) | not(a xor (not(b xor c)))
+0 0 0 | 0       | 1            | 1                    | 0
+1 0 0 | 0       | 1            | 0                    | 1
+0 1 0 | 1       | 0            | 0                    | 1
+1 1 0 | 1       | 0            | 1                    | 0
+0 0 1 | 1       | 0            | 0                    | 1
+1 0 1 | 1       | 0            | 1                    | 0
+0 1 1 | 0       | 1            | 1                    | 0
+1 1 1 | 0       | 1            | 0                    | 1
+
+not (a xor b) => a <-> b
+
+(a and b) or (not a and not b)
+
+a xor b =>
+    (a and not b) or (not a and b)
+
+not (a xor b) =>
+    (not (a and not b) or (not a and b))
+    (not a or b) and (a or not b)
+
+
+a -> b => not a or b
+a <-> b => (a -> b) and (b -> a)
+        => (not a or b) and (a or not b)
+

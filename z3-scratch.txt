@@ -1,0 +1,12 @@
+(declare-const b1 Bool) (declare-const b2 Bool) (declare-const b3 Bool)
+(declare-const i1 Int) (declare-const i2 Int) (declare-const i3 Int)
+
+(assert (and
+    ;;(= b1 )
+    (= b2 true)
+    (= b3 true)
+
+    (xor b1 (xor b2 b3))
+))
+(check-sat)
+(get-model)
