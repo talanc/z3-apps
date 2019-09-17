@@ -1,0 +1,87 @@
+;; Input
+;; Jobs 1 to 8, have running times 4,5,6,7,8,9,10,11
+;; Workers, A, B, C
+;; Jobs 1 and 4 need to be worked on by B
+;; Job 2 runs after 6 and 7
+
+(declare-const t Int)
+(declare-fun s (Int) Int)
+(declare-fun e (Int) Int)
+(declare-fun p (Int) Int)
+
+;; (P(i) = P(j)) =>
+;; (S(j) >= E(i) or S(i) >= E(j))
+(define-fun one-job ((i Int) (j Int)) Bool
+    (=> 
+        (= (p i) (p j))
+        (or
+            (>= (s j) (e i))
+            (>= (s i) (e j))
+        )
+    )
+)
+
+(minimize t)
+
+(assert (and
+    ;; start times >= 0
+    (>= (s 1) 0)
+    (>= (s 2) 0)
+    (>= (s 3) 0)
+    (>= (s 4) 0)
+    (>= (s 5) 0)
+    (>= (s 6) 0)
+    (>= (s 7) 0)
+    (>= (s 8) 0)
+
+    ;; end times <= t
+    (<= (e 1) t)
+    (<= (e 2) t)
+    (<= (e 3) t)
+    (<= (e 4) t)
+    (<= (e 5) t)
+    (<= (e 6) t)
+    (<= (e 7) t)
+    (<= (e 8) t)
+
+    ;; running times
+    (= (- (e 1) (s 1)) 4)
+    (= (- (e 2) (s 2)) 5)
+    (= (- (e 3) (s 3)) 6)
+    (= (- (e 4) (s 4)) 7)
+    (= (- (e 5) (s 5)) 8)
+    (= (- (e 6) (s 6)) 9)
+    (= (- (e 7) (s 7)) 10)
+    (= (- (e 8) (s 8)) 11)
+
+    ;; job 2 runs after 6 and 7
+    (>= (s 2) (e 6))
+    (>= (s 2) (e 7))
+
+    ;; worker B must work on 1 and 4
+    (= (p 1) 2)
+    (= (p 4) 2)
+
+    ;; make sure all work is scheduled
+    (<= 1 (p 1) 3)
+    (<= 1 (p 2) 3)
+    (<= 1 (p 3) 3)
+    (<= 1 (p 4) 3)
+    (<= 1 (p 5) 3)
+    (<= 1 (p 6) 3)
+    (<= 1 (p 7) 3)
+    (<= 1 (p 8) 3)
+
+    (one-job 1 2) (one-job 1 3) (one-job 1 4) (one-job 1 5) (one-job 1 6) (one-job 1 7) (one-job 1 8)
+    (one-job 2 3) (one-job 2 4) (one-job 2 5) (one-job 2 6) (one-job 2 7) (one-job 2 8)
+    (one-job 3 4) (one-job 3 5) (one-job 3 6) (one-job 3 7) (one-job 3 8)
+    (one-job 4 5) (one-job 4 6) (one-job 4 7) (one-job 4 8)
+    (one-job 5 6) (one-job 5 7) (one-job 5 8)
+    (one-job 6 7) (one-job 6 8)
+    (one-job 7 8)
+
+))
+
+
+(check-sat)
+(get-model)
