@@ -1,0 +1,98 @@
+;; Exercise
+;; Job scheduling
+;;
+;; Jobs 1..10
+;; 
+;; The running time of job i is i + 10, for i = 1, 2, . . . , 10.
+;; Job 3 may only start if jobs 1 and 2 have been finished.
+;; Job 6 may only start if jobs 2 and 4 have been finished.
+;; Job 7 may only start if jobs 1, 4 and 5 have been finished.
+;; Job 8 may only start if jobs 3 and 6 have been finished.
+;; Job 9 may only start if jobs 6 and 7 have been finished.
+;; Job 10 may only start if jobs 8 and 9 have been finished.
+;;
+;; What is the minimal total running time?
+;;
+;; 71
+
+;; Take all requirements from Question 1, but now additionally it is required that job 7 should not start earlier than job 8.
+;;
+;; What is the minimal total running time?
+;;
+;; 87
+
+(declare-const t Int)
+(declare-fun s (Int) Int)
+(declare-fun e (Int) Int)
+
+(minimize t)
+
+(assert (and
+    ;; Start times
+    (>= (s 1) 0)
+    (>= (s 2) 0)
+    (>= (s 3) 0)
+    (>= (s 4) 0)
+    (>= (s 5) 0)
+    (>= (s 6) 0)
+    (>= (s 7) 0)
+    (>= (s 8) 0)
+    (>= (s 9) 0)
+    (>= (s 10) 0)
+
+    ;; Finish times
+    (<= (e 1) t)
+    (<= (e 2) t)
+    (<= (e 3) t)
+    (<= (e 4) t)
+    (<= (e 5) t)
+    (<= (e 6) t)
+    (<= (e 7) t)
+    (<= (e 8) t)
+    (<= (e 9) t)
+    (<= (e 10) t)
+
+    ;; The running time of job i is i + 10, for i = 1, 2, . . . , 10.
+    (= (- (e 1) (s 1)) 11)
+    (= (- (e 2) (s 2)) 12)
+    (= (- (e 3) (s 3)) 13)
+    (= (- (e 4) (s 4)) 14)
+    (= (- (e 5) (s 5)) 15)
+    (= (- (e 6) (s 6)) 16)
+    (= (- (e 7) (s 7)) 17)
+    (= (- (e 8) (s 8)) 18)
+    (= (- (e 9) (s 9)) 19)
+    (= (- (e 10) (s 10)) 20)
+
+    ;; Job 3 may only start if jobs 1 and 2 have been finished.
+    (>= (s 3) (e 1))
+    (>= (s 3) (e 2))
+
+    ;; Job 6 may only start if jobs 2 and 4 have been finished.
+    (>= (s 6) (e 2))
+    (>= (s 6) (e 4))
+
+    ;; Job 7 may only start if jobs 1, 4 and 5 have been finished.
+    (>= (s 7) (e 1))
+    (>= (s 7) (e 4))
+    (>= (s 7) (e 5))
+
+    ;; Job 8 may only start if jobs 3 and 6 have been finished.
+    (>= (s 8) (e 3))
+    (>= (s 8) (e 6))
+
+    ;; Job 9 may only start if jobs 6 and 7 have been finished.
+    (>= (s 9) (e 6))
+    (>= (s 9) (e 7))
+
+    ;; Job 10 may only start if jobs 8 and 9 have been finished.
+    (>= (s 10) (e 8))
+    (>= (s 10) (e 9))
+
+    ;; that job 7 should not start earlier than job 8
+    (> (s 7) (s 8))
+))
+
+
+(check-sat)
+(get-model)
